@@ -7,37 +7,76 @@ function getComputerChoice(){
     // console.log("Chosen random number is "+random);
     return rpsArr[random];
 }
-
-function playRound(playerSelection, computerSelection){
-    if(playerSelection.toLowerCase() === computerSelection.toLowerCase()){
-        return `TIE! You both selected ${computerSelection}`; 
-    }
-    else if(playerSelection.toLowerCase() === "rock" && computerSelection === "Scissors"){
-        playerScore++;
-        return "You Won! Rock beats Scissors";
-    }
-    else if(playerSelection.toLowerCase() === "paper" && computerSelection === "Rock"){
-        playerScore++;
-        return "You Won! Paper beats Rock";
-    }
-    else if(playerSelection.toLowerCase() === "scissors" && computerSelection === "Paper"){
-        playerScore++;
-        return "You Won! Scissors beats Paper";
+//Capitalize the string
+function capitalizeStr(str){
+    if(!(str.charAt(0) === str.toUpperCase())){
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     }
     else{
-        let playerChoice = (str) => {
-            if(!(str.charAt(0) === str.toUpperCase())){
-                return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-            }else{
-                return str.charAt(0) + str.slice(1).toLowerCase();
-            }
-        };
-        compScore++;
-        return `You Lose! ${playerChoice(playerSelection)} can't beat ${computerSelection}`
+        return str.charAt(0) + str.slice(1).toLowerCase();
     }
-    
+}
+// Make sure the player choice between Rock, Paper and Scissors
+function getPlayerChoice(){
+    let choice = prompt("Rock! Paper! Scissors!\nChoose: ");
+    if(capitalizeStr(choice) === "Rock" || capitalizeStr(choice) === "Paper" || capitalizeStr(choice) === "Scissors"){
+    return capitalizeStr(choice);
+    }
 }
 
-const playerSelection = prompt("Rock! Paper! Scissors!\nChoose: ");
-const computerSelection = getComputerChoice();
-console.log(playRound(playerSelection, computerSelection));
+// Choose who won and give points
+function playRound(playerSelection, computerSelection){
+    if(playerSelection.toLowerCase() === computerSelection.toLowerCase()){
+        console.log(`TIE! You both selected ${computerSelection}`);
+    }
+    else if(playerSelection.toLowerCase() === "rock" && computerSelection === "Scissors" || playerSelection.toLowerCase() === "paper" && computerSelection === "Rock" || playerSelection.toLowerCase() === "scissors" && computerSelection === "Paper"){
+        playerScore++;
+        console.log(`You Won! ${capitalizeStr(playerSelection)} beats ${computerSelection}`);
+    }
+    else{       
+        compScore++;
+        console.log(`You Lose! ${capitalizeStr(playerSelection)} can't beat ${computerSelection}`);
+        }
+}
+    
+
+
+function play(){
+        let playerSelection = getPlayerChoice();
+        const computerSelection = getComputerChoice();
+        while(playerSelection === undefined){
+            console.log("You can only choose Rock, Paper and Scissors. Try again!");
+            playerSelection = getPlayerChoice();
+        }
+        playRound(playerSelection, computerSelection);
+}
+
+// Sets 5 round of game and declare the winner
+function game(){
+    for(let i = 0; i < 5; i++){
+        play();
+        console.log(`Player Score: ${playerScore} \nComputer Score: ${compScore}`);
+    }
+
+    if(playerScore > compScore){
+        console.log(`YOU WON! Final Resuts:\nPlayer Score: ${playerScore} \nComputer Score: ${compScore}`);
+    }
+    else if(playerScore < compScore){
+        console.log(`YOU LOST! Final Results:\nPlayer Score: ${playerScore} \nComputer Score: ${compScore}`);
+    }
+    else{
+        let replay = prompt("IT'S A TIE! If you want to replay type 'yes': ");
+        if(replay.toLowerCase() === "yes"){
+            console.log("Let's replay then!")
+            game();
+        }
+        else{
+            console.log(`Session Ended...`);
+        }
+    }
+
+}
+
+game();
+
+
